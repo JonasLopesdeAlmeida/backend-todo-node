@@ -35,6 +35,18 @@ class TaskController{
             return res.status(500).json(error);
         })
     }
+    async listone(req, res){
+        await TaskModel.findById(req.params.id)
+        .then(response =>{
+            if(response)
+            return res.status(200).json(response);
+            else
+            return res.status(404).json({error: 'Task not found!'});
+        })
+        .catch(error => {
+            return res.status(500).json(error);
+        })
+    }
 
 }
 
