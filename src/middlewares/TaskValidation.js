@@ -26,11 +26,24 @@ const TaskValidation = async(req, res, next) =>{
 
    else {
      let exists;
+
+    if(req.params.id){
+    //validation to verify id if exists and ingnore a task comparing with other tasks.
+     exists = await TaskModel.findOne({
+        '_id': {'$ne': req.params.id},
+        'when': {'$eq': new Date(when)},
+        'macaddress':{'$in': macaddress}
+        
+       });
+    }
+    else{
+
     //validation to avoid duplicate task in the same day and time.
      exists = await TaskModel.findOne({
          'when': {'$eq': new Date(when)},
          'macaddress':{'$in': macaddress}
         });
+    }
 
      if(exists) {
         return res.status(400).json({error: 'there is already a task on the same day and time!'}) 
