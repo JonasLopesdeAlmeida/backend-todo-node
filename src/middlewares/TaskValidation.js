@@ -21,8 +21,7 @@ const TaskValidation = async(req, res, next) =>{
    else if(!when)
    return res.status(400).json({error: 'date and time are mandatory!'});
 
-   else if(isPast(new Date(when)))
-   return res.status(400).json({ error: 'choose a future date and time!'});
+  
 
    else {
      let exists;
@@ -37,6 +36,8 @@ const TaskValidation = async(req, res, next) =>{
        });
     }
     else{
+        if(isPast(new Date(when)))
+        return res.status(400).json({ error: 'choose a future date and time!'});
 
     //validation to avoid duplicate task in the same day and time.
      exists = await TaskModel.findOne({
